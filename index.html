@@ -207,26 +207,71 @@ function addMessage(text, type) {
 }
 
 
-function sendMessage() {
+async function sendMessage() {
 
   const input = document.getElementById("userInput");
-
   const text = input.value.trim();
 
   if (!text) return;
 
   addMessage(text, "user");
-
   input.value = "";
 
-  setTimeout(() => {
+  addMessage("🤖 ARVIS is thinking...", "ai");
 
-    addMessage(
-      "I'm currently running in demo mode. Soon I'll be connected to live market data, news and an AI model. 🚀",
-      "ai"
+  try {
+
+    const response = await fetch(
+      "https://dry-union-1ed7.sharanyatham292.workers.dev/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: text
+        })
+      }
     );
 
-  }, 500);
+    const data = await response.json();
+
+    const messages = document.getElementById("messages");
+
+    messages.lastElementChild.remove();
+
+    if (data.output_text) {
+      addMessage(data.output_text, "ai");
+    } else if (data.output) {
+      let answer = "";
+
+      for (const item of data.output) {
+        if (item.content) {
+          for (const content of item.content) {
+            if (content.text) {
+              answer += content.text;
+            }
+          }
+        }
+      }
+
+      addMessage(answer || "ARVIS received a response.", "ai");
+
+    } else {
+      addMessage("ARVIS could not understand the response.", "ai");
+    }
+
+  } catch (error) {
+
+    const messages = document.getElementById("messages");
+
+    messages.lastElementChild.remove();
+
+    addMessage(
+      "❌ Connection error. Please try again.",
+      "ai"
+    );
+  }
 }
 
 
