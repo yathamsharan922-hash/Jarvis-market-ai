@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARVIS - Market AI</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #0b0f19;
+      color: white;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid #252b38;
+    }
+
+    header h1 {
+      font-size: 28px;
+    }
+
+    header p {
+      color: #8d96a8;
+      margin-top: 5px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .market {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: #131925;
+      border: 1px solid #252b38;
+      border-radius: 12px;
+      padding: 15px;
+    }
+
+    .card small {
+      color: #8d96a8;
+    }
+
+    .card h2 {
+      margin-top: 8px;
+      font-size: 20px;
+    }
+
+    .chat {
+      background: #131925;
+      border: 1px solid #252b38;
+      border-radius: 15px;
+      min-height: 400px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #messages {
+      flex: 1;
+      overflow-y: auto;
+      padding-bottom: 15px;
+    }
+
+    .message {
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 10px;
+      max-width: 85%;
+      line-height: 1.5;
+    }
+
+    .user {
+      background: #1d4ed8;
+      margin-left: auto;
+    }
+
+    .ai {
+      background: #202938;
+      margin-right: auto;
+    }
+
+    .input-area {
+      display: flex;
+      gap: 8px;
+    }
+
+    input {
+      flex: 1;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid #303848;
+      background: #0b0f19;
+      color: white;
+      outline: none;
+    }
+
+    button {
+      padding: 14px 18px;
+      border: none;
+      border-radius: 10px;
+      background: #2563eb;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    @media (max-width: 600px) {
+      .market {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>🤖 ARVIS</h1>
+  <p>AI Market Intelligence Assistant</p>
+</header>
+
+<div class="container">
+
+  <div class="market">
+
+    <div class="card">
+      <small>🇮🇳 NIFTY 50</small>
+      <h2 id="nifty">Loading...</h2>
+    </div>
+
+    <div class="card">
+      <small>🇺🇸 S&P 500</small>
+      <h2 id="sp500">Loading...</h2>
+    </div>
+
+    <div class="card">
+      <small>🥇 GOLD</small>
+      <h2 id="gold">Loading...</h2>
+    </div>
+
+  </div>
+
+  <div class="chat">
+
+    <div id="messages">
+
+      <div class="message ai">
+        👋 Hello! I'm ARVIS, your market intelligence assistant.
+        <br><br>
+        Ask me about stocks, markets, economics or financial news.
+      </div>
+
+    </div>
+
+    <div class="input-area">
+      <input
+        id="userInput"
+        type="text"
+        placeholder="Ask ARVIS..."
+        onkeydown="handleKey(event)"
+      >
+
+      <button onclick="sendMessage()">Send</button>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+function addMessage(text, type) {
+
+  const messages = document.getElementById("messages");
+
+  const message = document.createElement("div");
+
+  message.className = "message " + type;
+
+  message.innerHTML = text;
+
+  messages.appendChild(message);
+
+  messages.scrollTop = messages.scrollHeight;
+}
+
+
+function sendMessage() {
+
+  const input = document.getElementById("userInput");
+
+  const text = input.value.trim();
+
+  if (!text) return;
+
+  addMessage(text, "user");
+
+  input.value = "";
+
+  setTimeout(() => {
+
+    addMessage(
+      "I'm currently running in demo mode. Soon I'll be connected to live market data, news and an AI model. 🚀",
+      "ai"
+    );
+
+  }, 500);
+}
+
+
+function handleKey(event) {
+
+  if (event.key === "Enter") {
+
+    sendMessage();
+
+  }
+
+}
+
+
+// Demo market values
+document.getElementById("nifty").innerText = "26,000";
+document.getElementById("sp500").innerText = "6,500";
+document.getElementById("gold").innerText = "$3,800";
+
+</script>
+
+</body>
+</html>
